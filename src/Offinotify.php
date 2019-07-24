@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Offinotify implements OfficialNotificationInterface
 {
-    public function send($notifiable, $trigger, $attributes)
+    public function send($notifiable, $trigger, array $attributes = [])
     {
         if (!$notifiable instanceof Collection && !is_array($notifiable)) {
             $notifiable = [$notifiable];

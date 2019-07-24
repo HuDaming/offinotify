@@ -52,12 +52,14 @@ class OfficialTried implements ShouldQueue
 
     protected function toOfficialNotification()
     {
+        $object = $this->trigger->toNotification();
+
         return [
-            'title' => !empty($this->attributes) ? ($this->attributes)['title'] : '',
-            'body' => !empty($this->attributes) ? ($this->attributes)['body'] : '',
+            'title' => !empty($this->attributes) ? ($this->attributes)['title'] : $object['title'],
+            'body' => !empty($this->attributes) ? ($this->attributes)['body'] : $object['title'],
             'subject' => null,
             'verb' => null,
-            'object' => $this->trigger->toNotification(),
+            'object' => $object,
         ];
     }
 }
