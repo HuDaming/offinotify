@@ -14,5 +14,6 @@
         "psr-4": {
             "Tantupix\\Offinotify\\": "src"
         }
-    }
+    },
+    "version": "1.0.0"
 }
