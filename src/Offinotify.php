@@ -43,7 +43,7 @@ class Offinotify implements OfficialNotificationInterface
     {
         $notification = OfficialNotification::query()->where('id', $id)->firstOrFail();
 
-        if ($notification->notifiable_id != 1) {
+        if ($notification->notifiable_id != auth()->id()) {
             abort(403, 'Unauthorized action.');
         }
         // 更新为已读
