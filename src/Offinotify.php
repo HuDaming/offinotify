@@ -6,6 +6,7 @@ use Tantupix\Offinotify\Models\OfficialNotification;
 use Illuminate\Support\Collection;
 use Tantupix\Offinotify\Jobs\OfficialTried;
 use App\Contracts\OfficialNotificationInterface;
+use Carbon\Carbon;
 
 class Offinotify implements OfficialNotificationInterface
 {
@@ -14,12 +15,8 @@ class Offinotify implements OfficialNotificationInterface
         if (!$notifiable instanceof Collection && !is_array($notifiable)) {
             $notifiable = [$notifiable];
         }
-
-        try {
-            OfficialTried::dispatch($notifiable, $trigger, $attributes);
-        } catch (\Exception $e) {
-            abort($e->getCode(), $e->getMessage());
-        }
+        $officialTried = new OfficialTried($notifiable, $trigger, $attributes);
+        return $officialTried->send();
     }
 
     public function notifications()
@@ -39,9 +36,9 @@ class Offinotify implements OfficialNotificationInterface
 
     public function show($id)
     {
-        $notification = OfficialNotification::query()->where('id', $id)->findOrFail();
+        $notification = OfficialNotification::query()->where('id', $id)->firstOrFail();
 
-        if ($notification->notifiable_id != auth()->id()) {
+        if ($notification->notifiable_id != 1) {
             abort(403, 'Unauthorized action.');
         }
         // 更新为已读
