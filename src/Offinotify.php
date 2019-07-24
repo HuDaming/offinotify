@@ -2,6 +2,9 @@
 
 namespace Tantupix\Offinotify;
 
+use Tantupix\Offinotify\Models\OfficialNotification;
+use Illuminate\Support\Collection;
+use Tantupix\Offinotify\Jobs\OfficialTried;
 use App\Contracts\OfficialNotificationInterface;
 
 class Offinotify implements OfficialNotificationInterface
@@ -15,28 +18,28 @@ class Offinotify implements OfficialNotificationInterface
         try {
             OfficialTried::dispatch($notifiable, $trigger, $attributes);
         } catch (\Exception $e) {
-            // TODO;
+            abort($e->getCode(), $e->getMessage());
         }
     }
 
     public function notifications()
     {
-        return Notification::notifications();
+        return OfficialNotification::notifications();
     }
 
     public function readNotifications()
     {
-        return Notification::readNotifications();
+        return OfficialNotification::readNotifications();
     }
 
     public function unreadNotifications()
     {
-        return Notification::unreadNotifications();
+        return OfficialNotification::unreadNotifications();
     }
 
     public function show($id)
     {
-        $notification = Notification::query()->where('id', $id)->findOrFail();
+        $notification = OfficialNotification::query()->where('id', $id)->findOrFail();
 
         if ($notification->notifiable_id != auth()->id()) {
             abort(403, 'Unauthorized action.');
@@ -49,17 +52,17 @@ class Offinotify implements OfficialNotificationInterface
 
     public function markAsRead()
     {
-        return Notification::unreadNotifications()->update(['read_at' => Carbon::now()->toDateTimeString()]);
+        return OfficialNotification::unreadNotifications()->update(['read_at' => Carbon::now()->toDateTimeString()]);
     }
 
     public function unreadCount()
     {
-        return Notification::unreadNotifications()->count();
+        return OfficialNotification::unreadNotifications()->count();
     }
 
     public function destroy()
     {
-        return Notification::readNotifications()->delete();
+        return OfficialNotification::readNotifications()->delete();
     }
 
     public function updateNotifications()
