@@ -2,24 +2,31 @@
 
 namespace Tantupix\Offinotify\Jobs;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Tantupix\Offinotify\Models\OfficialNotification;
 
-class OfficialTried
+class OfficialTried implements ShouldQueue
 {
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     protected $notifiable;
     protected $trigger;
     protected $attributes;
 
-    public function __construct($notifiable, $trigger, array $attributes = [])
+    public function __construct($trigger, $notifiable, array $attributes = [])
     {
-        $this->notifiable = $notifiable;
         $this->trigger = $trigger;
+        $this->notifiable = $notifiable;
         $this->attributes = $attributes;
     }
 
-    public function send()
+    public function handle()
     {
         $notifications = [];
         $data = $this->toOfficialNotification();
@@ -40,7 +47,7 @@ class OfficialTried
         }
 
         // 写入数据
-        return OfficialNotification::insert($notifications);
+        \DB::table('official_notifications')->insert($notifications);
     }
 
     protected function toOfficialNotification()

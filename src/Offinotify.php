@@ -15,8 +15,13 @@ class Offinotify implements OfficialNotificationInterface
         if (!$notifiable instanceof Collection && !is_array($notifiable)) {
             $notifiable = [$notifiable];
         }
-        $officialTried = new OfficialTried($notifiable, $trigger, $attributes);
-        return $officialTried->send();
+
+        try {
+            dispatch(new OfficialTried($trigger, $notifiable, $attributes));
+            return ['code' => 0, 'msg' => 'OK'];
+        } catch (\Exception $e) {
+            return ['code' => $e->getCode(), 'msg' => $e->getMessage()];
+        }
     }
 
     public function notifications()
