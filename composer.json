@@ -1,0 +1,18 @@
+{
+    "name": "tantupix/offinotify",
+    "description": "official notify sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "HuDaming",
+            "email": "40834106@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Tantupix\\Offinotify\\": "src"
+        }
+    }
+}
