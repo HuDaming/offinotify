@@ -18,17 +18,19 @@ class OfficialTried implements ShouldQueue
     protected $notifiable;
     protected $trigger;
     protected $attributes;
+    protected $jpush;
 
-    public function __construct($trigger, $notifiable, array $attributes = [])
+    public function __construct($trigger, $notifiable, array $attributes = [], $jpush = true)
     {
         $this->trigger = $trigger;
         $this->notifiable = $notifiable;
         $this->attributes = $attributes;
+        $this->jpush = $jpush;
     }
 
     public function handle()
     {
-        $notifications = [];
+        $notifications = $userIds = [];
         $data = $this->toOfficialNotification();
         $datetime = Carbon::now()->toDateTimeString();
 
@@ -44,10 +46,19 @@ class OfficialTried implements ShouldQueue
                 'created_at' => $datetime,
                 'updated_at' => $datetime,
             ];
+            $userIds[] = $item->id;
         }
 
         // 写入数据
         \DB::table('official_notifications')->insert($notifications);
+
+        if ($this->jpush) {
+            $title = $this->attributes['jpush_title'];
+            $body = $this->attributes['jpush_body'];
+            $count = isset($this->attributes['jpush_unread_count']) ? $this->attributes['jpush_unread_count'] : '+1';
+
+            (new JPush())->sendMsg($userIds, $title, $body, 2, $count);
+        }
     }
 
     protected function toOfficialNotification()

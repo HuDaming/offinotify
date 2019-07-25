@@ -9,7 +9,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "jpush/jpush": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "Tantupix\\Offinotify\\": "src"

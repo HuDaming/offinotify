@@ -10,13 +10,14 @@ use Carbon\Carbon;
 
 class Offinotify implements OfficialNotificationInterface
 {
-    public function send($notifiable, $trigger, array $attributes = [])
+    public function send($notifiable, $trigger, array $attributes = [], $jpush = true)
     {
         if (!$notifiable instanceof Collection && !is_array($notifiable)) {
             $notifiable = [$notifiable];
         }
 
         try {
+            // 写数据
             dispatch(new OfficialTried($trigger, $notifiable, $attributes));
             return ['code' => 0, 'msg' => 'OK'];
         } catch (\Exception $e) {
