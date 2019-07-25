@@ -18,20 +18,17 @@ class OfficialTried implements ShouldQueue
     protected $notifiable;
     protected $trigger;
     protected $attributes;
-    protected $jpush;
 
-    public function __construct($trigger, $notifiable, array $attributes = [], $jpush = true)
+    public function __construct($trigger, $notifiable, array $attributes = [])
     {
         $this->trigger = $trigger;
         $this->notifiable = $notifiable;
         $this->attributes = $attributes;
-        $this->jpush = $jpush;
     }
 
     public function handle()
     {
-        $notifications = $userIds = [];
-        $data = $this->toOfficialNotification();
+        $notifications = [];
         $datetime = Carbon::now()->toDateTimeString();
 
         foreach ($this->notifiable as $item) {
@@ -42,27 +39,13 @@ class OfficialTried implements ShouldQueue
                 'notifiable_type' => get_class($item),
                 'trigger_id' => $this->trigger->id,
                 'trigger_type' => get_class($this->trigger),
-                'data' => json_encode($data),
+                'data' => json_encode($this->attributes),
                 'created_at' => $datetime,
                 'updated_at' => $datetime,
             ];
-            $userIds[] = $item->id;
         }
 
         // 写入数据
         \DB::table('official_notifications')->insert($notifications);
-    }
-
-    protected function toOfficialNotification()
-    {
-        $object = $this->trigger->toNotification();
-
-        return [
-            'title' => !empty($this->attributes) ? ($this->attributes)['title'] : $object['title'],
-            'body' => !empty($this->attributes) ? ($this->attributes)['body'] : $object['title'],
-            'subject' => null,
-            'verb' => null,
-            'object' => $object,
-        ];
     }
 }
