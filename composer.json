@@ -10,7 +10,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "jpush/jpush": "dev-master"
+        "jpush/jpush": "^3.6"
     },
     "autoload": {
         "psr-4": {
