@@ -51,14 +51,6 @@ class OfficialTried implements ShouldQueue
 
         // 写入数据
         \DB::table('official_notifications')->insert($notifications);
-
-        if ($this->jpush) {
-            $title = $this->attributes['jpush_title'];
-            $body = $this->attributes['jpush_body'];
-            $count = isset($this->attributes['jpush_unread_count']) ? $this->attributes['jpush_unread_count'] : '+1';
-
-            (new JPush())->sendMsg($userIds, $title, $body, 2, $count);
-        }
     }
 
     protected function toOfficialNotification()
