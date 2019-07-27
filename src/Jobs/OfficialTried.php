@@ -15,12 +15,14 @@ class OfficialTried implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $type;
     protected $notifiable;
     protected $trigger;
     protected $attributes;
 
-    public function __construct($trigger, $notifiable, array $attributes = [])
+    public function __construct($type, $trigger, $notifiable, array $attributes = [])
     {
+        $this->type = $type;
         $this->trigger = $trigger;
         $this->notifiable = $notifiable;
         $this->attributes = $attributes;
@@ -34,7 +36,7 @@ class OfficialTried implements ShouldQueue
         foreach ($this->notifiable as $item) {
             $notifications[] = [
                 'id' => Str::uuid()->toString(),
-                'type' => get_class($this->trigger),
+                'type' => $this->type,
                 'notifiable_id' => $item->id,
                 'notifiable_type' => get_class($item),
                 'trigger_id' => $this->trigger->id,

@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Offinotify implements OfficialNotificationInterface
 {
-    public function send($notifiable, $trigger, array $attributes = [])
+    public function send($type, $notifiable, $trigger, array $attributes = [])
     {
         if (!$notifiable instanceof Collection && !is_array($notifiable)) {
             $notifiable = [$notifiable];
@@ -18,7 +18,7 @@ class Offinotify implements OfficialNotificationInterface
 
         try {
             // 写数据
-            dispatch(new OfficialTried($trigger, $notifiable, $attributes));
+            dispatch(new OfficialTried($type, $trigger, $notifiable, $attributes));
             return ['code' => 0, 'msg' => 'OK'];
         } catch (\Exception $e) {
             return ['code' => $e->getCode(), 'msg' => $e->getMessage()];
