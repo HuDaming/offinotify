@@ -11,7 +11,40 @@ $ composer require tantupix/offinotify -vvv
 
 ## Usage
 
-TODO
+config/app.php 中添加
+```
+'providers' => [
+    Tantupix\Offinotify\OffinotifyServiceProvider::class,
+],
+
+'aliases' => [
+    'Offinotify' => Tantupix\Offinotify\OffinotifyFacade::class,
+]
+```
+
+可用方法：
+```
+use Offinotify;
+// 发送站内信
+Offinotify::send($type, $notifiable, trigger, array $attributes = []);
+// 站内信列表
+Offinotify::notifications();
+// 已读站内信列表
+Offinotify::readNotifications();
+// 未读站内信列表
+Offinotify::unreadNotifications();
+// 一键标记已读
+Offinotify::markAsRead();
+// 阅读一条站内信
+Offinotify::show($id);
+// 未读站内信数量
+Offinotify::unreadCount();
+// 删除已读站内信
+Offinotify::destroy();
+// 更新站内信内容
+Offinotify::updateNotifications();
+```
+
 
 ## Contributing
 
