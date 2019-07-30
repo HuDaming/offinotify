@@ -68,8 +68,13 @@ class Offinotify implements OfficialNotificationInterface
         return OfficialNotification::readNotifications()->delete();
     }
 
-    public function updateNotifications()
+    public function updateNotifications($class, $id, array $data = [])
     {
-        echo "更新系统通知";
+        return OfficialNotification::where([
+            'trigger_type' => $class,
+            'trigger_id' => $id
+        ])->update([
+            'data' => json_encode($data),
+        ]);
     }
 }

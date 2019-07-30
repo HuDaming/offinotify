@@ -42,7 +42,7 @@ Offinotify::unreadCount();
 // 删除已读站内信
 Offinotify::destroy();
 // 更新站内信内容
-Offinotify::updateNotifications();
+Offinotify::updateNotifications($class, $id, array $data = []);
 ```
 
 
