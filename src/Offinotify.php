@@ -17,8 +17,7 @@ class Offinotify implements OfficialNotificationInterface
         }
 
         try {
-            // 写数据
-            dispatch(new OfficialTried($type, $trigger, $notifiable, $attributes));
+            OfficialNotification::saveNotifications($type, $notifiable, $trigger, $attributes);
             return ['code' => 0, 'msg' => 'OK'];
         } catch (\Exception $e) {
             return ['code' => $e->getCode(), 'msg' => $e->getMessage()];
