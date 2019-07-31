@@ -18,8 +18,8 @@ class CreateOfficialNotificationsTable extends Migration
             $table->string('type')->comment('通知类型');
             $table->unsignedBigInteger('notifiable_id');
             $table->string('notifiable_type');
-            $table->unsignedBigInteger('trigger_id');
-            $table->string('trigger_type');
+            $table->unsignedBigInteger('trigger_id')->nullable();
+            $table->string('trigger_type')->nullable();
             $table->text('data');
             $table->dateTime('read_at')->nullable();
             $table->dateTime('deleted_at')->nullable();
